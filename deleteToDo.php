@@ -3,13 +3,19 @@
 
     $id= $_POST['id'];
 
-    //elimino riga
-    $stmt = $connection->prepare("DELETE FROM todolist WHERE id=?"); 
+    
+    $stmt = $connection->prepare("SELECT * FROM todolist WHERE id=?");
     $stmt->bind_param("s",$id);
+    $stmt->execute();
 
-    $var = $stmt->execute();
-    //ERRORE DI CONNESSIONE
-    if(!$var) echo "Error: " . $stmt . "<br>" . $connection->error;
+    //controllo se esiste 
+    if($stmt->get_result()){
+
+        //elimino riga
+        $stmt = $connection->prepare("DELETE FROM todolist WHERE id=?"); 
+        $stmt->bind_param("s",$id);
+        $stmt->execute();
+    }
 
     $stmt->close();
 
