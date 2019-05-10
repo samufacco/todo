@@ -11,12 +11,13 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css">
 
     <style>
 
-
-        button {
-            padding: 10px;
+        
+        * {
+            font-family: 'Open Sans'; 
         }
 
         #add {
@@ -76,11 +77,10 @@
             <?php
 
             $stmt = $connection->prepare("SELECT * FROM todolist ORDER BY scadenza"); 
-
+            
             $stmt->execute();
 
             $var = $stmt->get_result();
-
 
             //per ogni riga
             foreach($var as $riga):        
@@ -102,7 +102,9 @@
 
                     <form action="deleteToDo.php" method="post" class="text-right align-self-end d-inline">
                         <input type="hidden" name="id" value="<?=$riga['id'] ?>">
-                        <button type="submit" class="btn btn-outline-danger border border-0 align-self-end"> 
+                        <button type="submit" 
+                        onclick=" if(confirm('Do you want to delete this?')) return true; return false;" 
+                            class="btn btn-outline-danger border border-0 align-self-end"> 
                             <i class="fa fa-archive"></i> Delete
                         </button> 
                     </form>
