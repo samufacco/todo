@@ -13,8 +13,6 @@
 
         $stmt->execute();
         
-        $var = $stmt->get_result();
-       
         $stmt->close();
         
     }
