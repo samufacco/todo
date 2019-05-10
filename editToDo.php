@@ -3,13 +3,14 @@
 
     $id= $_POST['id'];
     $nuovaDescrizione = $_POST['description'];
+    $nuovaData = $_POST['date'];
 
-    //elimino riga
-    $comando="UPDATE todolist SET descrizione='$nuovaDescrizione' WHERE id='$id'";
+    //modifico riga
+    $stmt = $connection->prepare("UPDATE todolist SET descrizione=?,scadenza=? WHERE id=?");
 
-    $var = $connection->query($comando);
-    //ERRORE DI CONNESSIONE
-    if (!$var) echo "Error: " . $comando . "<br>" . $connection->error;
+    $stmt->bind_param("sss", $nuovaDescrizione, $nuovaData, $id);
+
+    $var = $stmt->execute();
 
     $connection->close();
     
