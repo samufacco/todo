@@ -8,12 +8,13 @@
     $stmt->bind_param("s",$id);
     $stmt->execute();
 
+    $r = $stmt->get_result();
     //controllo se esiste 
-    if($stmt->get_result()){
+    if($r->num_rows()!=0){
 
         //elimino riga
         $stmt = $connection->prepare("DELETE FROM todolist WHERE id=?"); 
-        $stmt->bind_param("s",$id);
+        $stmt->bind_param("i",$id);
         $stmt->execute();
     }
 
