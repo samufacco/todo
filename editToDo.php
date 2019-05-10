@@ -8,7 +8,7 @@
     //modifico riga
     $stmt = $connection->prepare("UPDATE todolist SET descrizione=?,scadenza=? WHERE id=?");
 
-    $stmt->bind_param("sss", $nuovaDescrizione, $nuovaData, $id);
+    $stmt->bind_param("ssi", $nuovaDescrizione, $nuovaData, $id);
 
     $var = $stmt->execute();
 
