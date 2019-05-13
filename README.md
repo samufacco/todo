@@ -7,4 +7,4 @@
 - Change font from standard to Google Sans font.
 - In editToDo implement bind_param() and the possibility to change the data.
 - Implement control to delete items.
-
+- Fixed xss.
