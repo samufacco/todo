@@ -1,3 +1,4 @@
+
 <?php
     include 'connection.php';
 
@@ -15,4 +16,5 @@
     $stmt->close();
     
     header("Location: index.php");
+
 ?>
