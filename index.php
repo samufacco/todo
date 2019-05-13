@@ -76,6 +76,7 @@
             <?php
 
             $stmt = $connection->prepare("SELECT * FROM todolist WHERE done='0' ORDER BY scadenza");
+          
             $stmt->execute();
 
             $var = $stmt->get_result();
@@ -133,7 +134,6 @@
             ?>
                   
         </div>    
-        
     </div>
 
 </body>

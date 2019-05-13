@@ -1,3 +1,4 @@
+
 <?php
     include 'connection.php';
 
@@ -12,7 +13,7 @@
 
     $var = $stmt->execute();
 
-    $stmt->close();
+    $connection->close();
     
     header("Location: index.php");
 ?>

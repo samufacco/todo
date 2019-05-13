@@ -12,7 +12,7 @@
 
         $stmt->execute();
         
-        $stmt ->close();
+        $stmt->close();
     }
     header("Location: index.php");
 ?>
