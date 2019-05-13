@@ -1,5 +1,20 @@
 <?php
     include 'connection.php';
+
+    if(isset($_GET['edit']) && $_GET['edit'] == 'on'){
+
+        $id= $_POST['id'];
+
+        //prelevo risultato
+        $stmt = $connection->prepare("SELECT * FROM todolist WHERE id=?");
+        $stmt->bind_param("i",$id);
+        $stmt->execute();
+        $ris = $stmt->get_result();
+
+        //INSERISCO DATI SOPRA
+        
+        $stmt->close();
+    }   
 ?>
 
 <html lang="en">
@@ -11,11 +26,9 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css">
 
     <style>
 
-        
         * {
             font-family: 'Open Sans'; 
         }
@@ -48,32 +61,51 @@
         <h1 class="text-center">Welcome to your TODO list</h1>
 
         <div class="col-12">
-            <form id="add" action="addToDo.php" method="POST" class="rounded p-4">
+            <form id="add" action="update.php" method="post" class="rounded p-4">
                 <div class="row">
 
                     <div class="col-5">
                         <label for="description">Description</label>
-                        <input class="form-control" name="description" type="text" placeholder="...">
+                        <input class="form-control" id="description" name="description" type="text" placeholder="...">
                     </div>
 
                     <div class="col-5">
                         <label for="date">Expiring date:</label>
-                        <input class="form-control" name="date" type="text" placeholder="yyyy/mm/dd">
+                        <input class="form-control" id="date" name="date" type="text" placeholder="yyyy/mm/dd">
                     </div>
 
-                    <div class="col-2 align-self-end">
-                        <button type="submit" class="btn btn-outline-primary border border-0 ">
-                                <i class="fa fa-plus-circle"></i> Add           
-                        </button> 
-                    </div>
+                    <?php
+
+                        if(isset($_GET['edit']) && $_GET['edit'] == 'on'){
+
+                            echo '<div class="col-2 align-self-end">
+                                    <input type="hidden" name="id" value="'.$_GET['id'].'">
+                                    <button type="submit" class="btn btn-outline-success border border-0 ">
+                                            <i class="fa fa-check-square"></i> Edit           
+                                    </button> 
+                                  </div>';
+                        }else{
+                            
+                            echo '<div class="col-2 align-self-end">
+                                    <button type="submit" class="btn btn-outline-primary border border-0 ">
+                                            <i class="fa fa-plus-circle"></i> Add           
+                                    </button> 
+                                  </div>';
+                        }
+                    ?>
                 </div>
             </form> 
         </div>
-    
 
         <div class="col-12">
 
             <?php
+
+            if(isset($_GET['m']) && $_GET['m'] == 'error'){
+                
+                echo '<div class="alert alert-danger" role="alert">
+                ERRORE! Inserimento non valido o non permesso.</div>'; 
+            }
 
             $stmt = $connection->prepare("SELECT * FROM todolist WHERE done='0' ORDER BY scadenza");
             $stmt->execute();
@@ -81,15 +113,14 @@
             $var = $stmt->get_result();
 
             //per ogni riga di non fatti
-            foreach($var as $riga){
-                    
+            foreach($var as $riga){    
                 echo ' <div class="sticker">
                         <p style="width: 900px;">'.$riga['descrizione'].'</p>
                         <p class="font-italic scadenza">Exp. '.$riga['scadenza'].'</p>
 
-                        <form action="editToDo.php" method="post" class="text-right align-self-end d-inline">
+                        <form action="index.php?edit=on&id='.$riga['id'].'" method="post" class="text-right align-self-end d-inline">
                             <input type="hidden" name="id" value="'.$riga['id'].'">
-                            <button style="margin-left: 870px;" type="button" class="btn btn-outline-warning border border-0 align-self-end">
+                            <button style="margin-left: 870px;" type="submit" class="btn btn-outline-warning border border-0 align-self-end">
                                 <i class="fa fa-pencil"></i> Edit
                             </button>           
                         </form>
@@ -99,9 +130,8 @@
                             <button type="submit" class="btn btn-outline-success border border-0 align-self-end"> 
                                 <i class="fa fa-check-square"></i> Done
                             </button> 
-                        </form> 
-                        
-                        </div>';
+                        </form>
+                       </div>';
                 
             }
 
@@ -112,7 +142,6 @@
             $var2 = $stmt2->get_result();
 
             foreach($var2 as $riga){
-            
                 echo ' <div class="sticker" style="background-color: rgb(120, 255, 120);">
                         <p style="width: 900px;">'.$riga['descrizione'].'</p>
                         <p class="font-italic scadenza">Exp. '.$riga['scadenza'].'</p>
