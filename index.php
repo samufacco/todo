@@ -67,52 +67,74 @@
                         </button> 
                     </div>
                 </div>
-            </form>
-            
+            </form> 
         </div>
     
-            
+
         <div class="col-12">
 
             <?php
 
-            $stmt = $connection->prepare("SELECT * FROM todolist ORDER BY scadenza"); 
-            
+            $stmt = $connection->prepare("SELECT * FROM todolist WHERE done='0' ORDER BY scadenza");
+          
             $stmt->execute();
 
             $var = $stmt->get_result();
 
-            //per ogni riga
-            foreach($var as $riga):        
+            //per ogni riga di non fatti
+            foreach($var as $riga){
+                    
+                echo ' <div class="sticker">
+                        <p style="width: 900px;">'.$riga['descrizione'].'</p>
+                        <p class="font-italic scadenza">Exp. '.$riga['scadenza'].'</p>
+
+                        <form action="editToDo.php" method="post" class="text-right align-self-end d-inline">
+                            <input type="hidden" name="id" value="'.$riga['id'].'">
+                            <button style="margin-left: 870px;" type="button" class="btn btn-outline-warning border border-0 align-self-end">
+                                <i class="fa fa-pencil"></i> Edit
+                            </button>           
+                        </form>
+
+                        <form action="doneToDo.php" method="post" class="text-right align-self-end d-inline">
+                            <input type="hidden" name="id" value="'.$riga['id'].'">
+                            <button type="submit" class="btn btn-outline-success border border-0 align-self-end"> 
+                                <i class="fa fa-check-square"></i> Done
+                            </button> 
+                        </form> 
+                        
+                        </div>';
+                
+            }
+
+            $stmt2 = $connection->prepare("SELECT * FROM todolist WHERE done='1' ORDER BY scadenza"); 
+
+            $stmt2->execute();
+
+            $var2 = $stmt2->get_result();
+
+            foreach($var2 as $riga){
+            
+                echo ' <div class="sticker" style="background-color: rgb(120, 255, 120);">
+                        <p style="width: 900px;">'.$riga['descrizione'].'</p>
+                        <p class="font-italic scadenza">Exp. '.$riga['scadenza'].'</p>
+
+                        <form action="deleteToDo.php" method="post" class="text-right align-self-end d-inline">
+                            <input type="hidden" name="id" value="'.$riga['id'].'">
+                            <button type="submit" onclick="if(confirm("Do you want to delete this?")) return true; return false;"
+                                class="btn btn-outline-danger border border-0 align-self-end"> 
+                                <i class="fa fa-archive"></i> Delete
+                            </button> 
+                        </form> 
+                
+                    </div>';
+                
+            }
+
+            $stmt2->close();
             ?>
-
-                <div class="sticker">
-
-                    <p style="width: 900px;"><?=$riga['descrizione'] ?></p>
-
-                    <p class="font-italic scadenza">Exp. <?=$riga['scadenza'] ?></p>
-
-                    <form action="editToDo.php" method="post" class="text-right align-self-end d-inline">
-                        <input type="hidden" name="id" value="<?=$riga['id'] ?>">
-                        <button style="margin-left: 870px;" type="button" onclick="document.getElementById('description').value = <?=$riga['descrizione'] ?>;"
-                                class="btn btn-outline-warning border border-0 align-self-end">
-                            <i class="fa fa-pencil"></i> Edit
-                        </button>           
-                    </form>
-
-                    <form action="deleteToDo.php" method="post" class="text-right align-self-end d-inline">
-                        <input type="hidden" name="id" value="<?=$riga['id'] ?>">
-                        <button type="submit" 
-                        onclick=" if(confirm('Do you want to delete this?')) return true; return false;" 
-                            class="btn btn-outline-danger border border-0 align-self-end"> 
-                            <i class="fa fa-archive"></i> Delete
-                        </button> 
-                    </form>
-
-                </div>
-
-            <?php endforeach; ?>
-        </div>
+                  
+        </div>    
     </div>
+
 </body>
 </html>

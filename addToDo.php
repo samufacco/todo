@@ -3,10 +3,9 @@
 
     if(isset($_POST['description']) && isset($_POST['date'])){
 
-        //aggiunta codice
-        $description = $_POST['description'];
-        $date = $_POST['date'];
-        
+        $description = strip_tags($_POST['description']);
+        $date = $_POST['date']
+
         //inserimento nuova riga
         $stmt = $connection->prepare("INSERT INTO todolist (descrizione, scadenza) VALUES (?,?)"); 
         $stmt->bind_param("ss",$description,$date);
@@ -14,7 +13,6 @@
         $stmt->execute();
         
         $stmt->close();
-        
     }
     header("Location: index.php");
 ?>
