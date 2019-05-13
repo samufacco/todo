@@ -3,8 +3,8 @@
     include 'connection.php';
 
     $id= $_POST['id'];
-    $nuovaDescrizione = $_POST['description'];
-    $nuovaData = $_POST['date'];
+    $nuovaDescrizione = strip_tags($_POST['description']);
+    $nuovaData = strip_tags($_POST['date']);
 
     //modifico riga
     $stmt = $connection->prepare("UPDATE todolist SET descrizione=?,scadenza=? WHERE id=?");
@@ -13,7 +13,8 @@
 
     $var = $stmt->execute();
 
-    $connection->close();
+    $stmt->close();
     
     header("Location: index.php");
+
 ?>
